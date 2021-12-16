@@ -1,0 +1,9 @@
+{
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "extensions": [
+        "elmtooling.elm-ls-vscode",
+        "ms-vscode.test-adapter-converter"
+    ]
+}
