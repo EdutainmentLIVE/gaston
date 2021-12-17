@@ -2,6 +2,8 @@ module Gaston.Main exposing (..)
 
 import Browser
 import Browser.Navigation as Nav
+import Dict
+import Gaston.LocalStorage as LocalStorage
 import Gaston.Type.Flags as Flags
 import Gaston.Type.Message as Message
 import Gaston.Type.Model as Model
@@ -29,6 +31,7 @@ init flags url key =
     let
         model =
             { flags = flags
+            , items = Dict.empty
             , key = key
             , posix = Nothing
             , url = url
@@ -47,4 +50,7 @@ init flags url key =
 
 subscriptions : Model.Model -> Sub Message.Message
 subscriptions _ =
-    Time.every 1000 Message.PosixChange
+    Sub.batch
+        [ Time.every 1000 Message.PosixChange
+        , LocalStorage.receiveItem (\item -> Message.ReceiveItem item.key item.value)
+        ]
