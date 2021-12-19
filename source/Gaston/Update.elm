@@ -1,4 +1,4 @@
-module Gaston.Update exposing (..)
+module Gaston.Update exposing (update)
 
 import Browser
 import Browser.Navigation as Nav

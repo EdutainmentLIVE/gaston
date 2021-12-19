@@ -1,4 +1,4 @@
-module Gaston.View exposing (..)
+module Gaston.View exposing (view)
 
 import Browser
 import Gaston.Extra.Time as Time

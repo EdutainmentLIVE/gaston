@@ -1,4 +1,8 @@
-module Gaston.Type.Workouts exposing (..)
+module Gaston.Type.Workouts exposing
+    ( Workouts
+    , fromJson
+    , toJson
+    )
 
 import Gaston.Type.Workout as Workout
 import Json.Decode as Decode

@@ -1,4 +1,4 @@
-module Gaston.Type.Message exposing (..)
+module Gaston.Type.Message exposing (Message(..))
 
 import Browser
 import Time

@@ -1,4 +1,4 @@
-module Gaston.Constant exposing (..)
+module Gaston.Constant exposing (workoutsKey)
 
 
 workoutsKey : String

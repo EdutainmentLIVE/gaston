@@ -1,4 +1,9 @@
-port module Gaston.LocalStorage exposing (..)
+port module Gaston.LocalStorage exposing
+    ( receiveItem
+    , removeItem
+    , requestItem
+    , setItem
+    )
 
 
 port receiveItem : ({ key : String, value : Maybe String } -> msg) -> Sub msg

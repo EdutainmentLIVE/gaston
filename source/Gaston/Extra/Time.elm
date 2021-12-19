@@ -1,4 +1,9 @@
-module Gaston.Extra.Time exposing (..)
+module Gaston.Extra.Time exposing
+    ( posixFromJson
+    , posixToJson
+    , posixToString
+    , zonedPosixToString
+    )
 
 import Json.Decode as Decode
 import Json.Encode as Encode

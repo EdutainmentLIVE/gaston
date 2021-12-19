@@ -1,4 +1,11 @@
-module Gaston.Type.Exercise exposing (..)
+module Gaston.Type.Exercise exposing
+    ( Exercise(..)
+    , all
+    , fromJson
+    , fromString
+    , toJson
+    , toString
+    )
 
 import Json.Decode as Decode
 import Json.Encode as Encode

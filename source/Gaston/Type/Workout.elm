@@ -1,4 +1,8 @@
-module Gaston.Type.Workout exposing (..)
+module Gaston.Type.Workout exposing
+    ( Workout
+    , fromJson
+    , toJson
+    )
 
 import Gaston.Extra.Time as Time
 import Gaston.Type.Count as Count

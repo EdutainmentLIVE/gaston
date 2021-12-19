@@ -1,4 +1,11 @@
-module Gaston.Type.Count exposing (..)
+module Gaston.Type.Count exposing
+    ( Count
+    , fromInt
+    , fromJson
+    , toInt
+    , toJson
+    , zero
+    )
 
 import Json.Decode as Decode
 import Json.Encode as Encode

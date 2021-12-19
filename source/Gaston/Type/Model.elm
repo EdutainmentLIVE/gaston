@@ -1,4 +1,4 @@
-module Gaston.Type.Model exposing (..)
+module Gaston.Type.Model exposing (Model)
 
 import Browser.Navigation as Nav
 import Gaston.Type.Count as Count
