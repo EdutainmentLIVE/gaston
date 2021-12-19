@@ -7,6 +7,7 @@ import Url
 
 type Message
     = CountChange String
+    | DeleteWorkout Int
     | ExerciseChange String
     | Identity
     | PosixChange Time.Posix

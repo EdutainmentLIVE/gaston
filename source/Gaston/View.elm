@@ -76,10 +76,15 @@ view model =
 
                     RemoteData.Success workouts ->
                         Html.ul [ Attr.class "list-group mt-3" ] <|
-                            List.map
-                                (\workout ->
+                            List.indexedMap
+                                (\index workout ->
                                     Html.li [ Attr.class "list-group-item" ]
-                                        [ Html.dl [ Attr.class "mb-0" ]
+                                        [ Html.button
+                                            [ Attr.class "btn btn-outline-danger float-end"
+                                            , Attr.onClick (Message.DeleteWorkout index)
+                                            ]
+                                            [ Html.text "Delete" ]
+                                        , Html.dl [ Attr.class "mb-0" ]
                                             [ Html.dt [] [ Html.text "Time" ]
                                             , Html.dd []
                                                 [ Html.text <|

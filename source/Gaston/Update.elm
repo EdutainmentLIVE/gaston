@@ -11,6 +11,7 @@ import Gaston.Type.Model as Model
 import Gaston.Type.Workouts as Workouts
 import Json.Decode as Decode
 import Json.Encode as Encode
+import List.Extra as List
 import RemoteData
 import Url
 
@@ -29,6 +30,23 @@ update message model =
                             ( model, Cmd.none )
 
                 Nothing ->
+                    ( model, Cmd.none )
+
+        Message.DeleteWorkout index ->
+            case model.workouts of
+                RemoteData.Success workouts ->
+                    let
+                        newWorkouts =
+                            List.removeAt index workouts
+
+                        value =
+                            Encode.encode 0 (Workouts.toJson newWorkouts)
+                    in
+                    ( { model | workouts = RemoteData.Success newWorkouts }
+                    , LocalStorage.setItem { key = Constant.workoutsKey, value = value }
+                    )
+
+                _ ->
                     ( model, Cmd.none )
 
         Message.ExerciseChange string ->
