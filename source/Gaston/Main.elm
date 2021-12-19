@@ -2,13 +2,16 @@ module Gaston.Main exposing (..)
 
 import Browser
 import Browser.Navigation as Nav
-import Dict
+import Gaston.Constant as Constant
 import Gaston.LocalStorage as LocalStorage
+import Gaston.Type.Count as Count
+import Gaston.Type.Exercise as Exercise
 import Gaston.Type.Flags as Flags
 import Gaston.Type.Message as Message
 import Gaston.Type.Model as Model
 import Gaston.Update as Update
 import Gaston.View as View
+import RemoteData
 import Task
 import Time
 import Url
@@ -30,17 +33,20 @@ init : Flags.Flags -> Url.Url -> Nav.Key -> ( Model.Model, Cmd Message.Message )
 init flags url key =
     let
         model =
-            { flags = flags
-            , items = Dict.empty
+            { count = Count.zero
+            , exercise = Exercise.PushUp
+            , flags = flags
             , key = key
             , posix = Nothing
             , url = url
+            , workouts = RemoteData.Loading
             , zone = Nothing
             }
 
         command =
             Cmd.batch
-                [ Task.perform Message.ZoneChange Time.here
+                [ LocalStorage.requestItem Constant.workoutsKey
+                , Task.perform Message.ZoneChange Time.here
                 , Task.perform Message.PosixChange Time.now
                 , Task.perform identity (Task.succeed Message.Identity)
                 ]

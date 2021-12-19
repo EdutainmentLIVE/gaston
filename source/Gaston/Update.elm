@@ -2,10 +2,15 @@ module Gaston.Update exposing (..)
 
 import Browser
 import Browser.Navigation as Nav
-import Dict
+import Gaston.Constant as Constant
 import Gaston.LocalStorage as LocalStorage
+import Gaston.Type.Count as Count
+import Gaston.Type.Exercise as Exercise
 import Gaston.Type.Message as Message
 import Gaston.Type.Model as Model
+import Gaston.Type.Workouts as Workouts
+import Json.Decode as Decode
+import Json.Encode as Encode
 import RemoteData
 import Url
 
@@ -13,6 +18,27 @@ import Url
 update : Message.Message -> Model.Model -> ( Model.Model, Cmd Message.Message )
 update message model =
     case message of
+        Message.CountChange string ->
+            case String.toInt string of
+                Just int ->
+                    case Count.fromInt int of
+                        Just count ->
+                            ( { model | count = count }, Cmd.none )
+
+                        Nothing ->
+                            ( model, Cmd.none )
+
+                Nothing ->
+                    ( model, Cmd.none )
+
+        Message.ExerciseChange string ->
+            case Exercise.fromString string of
+                Just exercise ->
+                    ( { model | exercise = exercise }, Cmd.none )
+
+                Nothing ->
+                    ( model, Cmd.none )
+
         Message.Identity ->
             ( model, Cmd.none )
 
@@ -20,22 +46,66 @@ update message model =
             ( { model | posix = Just posix }, Cmd.none )
 
         Message.RemoveItem key ->
-            ( { model | items = Dict.remove key model.items }
+            ( model
             , LocalStorage.removeItem key
             )
 
         Message.ReceiveItem key maybeValue ->
-            ( { model | items = Dict.insert key (RemoteData.Success maybeValue) model.items }
-            , Cmd.none
-            )
+            if key == Constant.workoutsKey then
+                case maybeValue of
+                    Nothing ->
+                        let
+                            workouts =
+                                []
+
+                            value =
+                                Encode.encode 0 (Workouts.toJson workouts)
+                        in
+                        ( { model | workouts = RemoteData.Success workouts }
+                        , LocalStorage.setItem { key = key, value = value }
+                        )
+
+                    Just value ->
+                        case Decode.decodeString Workouts.fromJson value of
+                            Err error ->
+                                ( { model | workouts = RemoteData.Failure error }, Cmd.none )
+
+                            Ok workouts ->
+                                ( { model | workouts = RemoteData.Success workouts }, Cmd.none )
+
+            else
+                ( model, Cmd.none )
 
         Message.RequestItem key ->
-            ( { model | items = Dict.insert key RemoteData.Loading model.items }
+            ( model
             , LocalStorage.requestItem key
             )
 
+        Message.SaveWorkout ->
+            case ( model.posix, model.workouts ) of
+                ( Just posix, RemoteData.Success workouts ) ->
+                    let
+                        workout =
+                            { count = model.count
+                            , exercise = model.exercise
+                            , posix = posix
+                            }
+
+                        newWorkouts =
+                            workout :: workouts
+
+                        value =
+                            Encode.encode 0 (Workouts.toJson newWorkouts)
+                    in
+                    ( { model | workouts = RemoteData.Success newWorkouts }
+                    , LocalStorage.setItem { key = Constant.workoutsKey, value = value }
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
         Message.SetItem key value ->
-            ( { model | items = Dict.insert key (RemoteData.Success (Just value)) model.items }
+            ( model
             , LocalStorage.setItem { key = key, value = value }
             )
 

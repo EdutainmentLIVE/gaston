@@ -6,11 +6,14 @@ import Url
 
 
 type Message
-    = Identity
+    = CountChange String
+    | ExerciseChange String
+    | Identity
     | PosixChange Time.Posix
     | ReceiveItem String (Maybe String)
     | RemoveItem String
     | RequestItem String
+    | SaveWorkout
     | SetItem String String
     | UrlChange Url.Url
     | UrlRequest Browser.UrlRequest

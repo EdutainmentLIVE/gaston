@@ -1,13 +1,15 @@
 module Gaston.View exposing (..)
 
 import Browser
-import Dict
 import Gaston.Extra.Time as Time
+import Gaston.Type.Count as Count
+import Gaston.Type.Exercise as Exercise
 import Gaston.Type.Message as Message
 import Gaston.Type.Model as Model
 import Html
 import Html.Attributes as Attr
 import Html.Events as Attr
+import Json.Decode as Decode
 import RemoteData
 
 
@@ -24,39 +26,73 @@ view model =
             ]
         , Html.div [ Attr.class "container" ]
             [ Html.div [ Attr.class "my-3" ]
-                [ Html.text "Value:"
-                , Html.text <|
-                    case Dict.get "hello" model.items of
-                        Nothing ->
-                            "Nothing"
-
-                        Just remoteData ->
-                            case remoteData of
-                                RemoteData.NotAsked ->
-                                    "Just NotAsked"
-
-                                RemoteData.Loading ->
-                                    "Just Loading"
-
-                                RemoteData.Failure _ ->
-                                    "Just (Failure _)"
-
-                                RemoteData.Success maybeString ->
-                                    case maybeString of
-                                        Nothing ->
-                                            "Just (Success Nothing)"
-
-                                        Just string ->
-                                            "Just (Success (Just " ++ string ++ "))"
-                , Html.button [ Attr.onClick (Message.SetItem "hello" "world") ]
-                    [ Html.text "set"
+                [ Html.h2 [] [ Html.text "Workouts" ]
+                , Html.form [ Attr.onSubmit Message.SaveWorkout ]
+                    [ Html.div [ Attr.class "mb-3" ]
+                        [ Html.label
+                            [ Attr.class "form-label"
+                            , Attr.for "exercise"
+                            ]
+                            [ Html.text "Exercise" ]
+                        , Html.select
+                            [ Attr.class "form-select"
+                            , Attr.id "exercise"
+                            , Attr.onInput Message.ExerciseChange
+                            ]
+                          <|
+                            List.map
+                                (\exercise -> Html.option [] [ Html.text (Exercise.toString exercise) ])
+                                Exercise.all
+                        ]
+                    , Html.div [ Attr.class "mb-3" ]
+                        [ Html.label
+                            [ Attr.class "form-label"
+                            , Attr.for "count"
+                            ]
+                            [ Html.text "Count" ]
+                        , Html.input
+                            [ Attr.class "form-control"
+                            , Attr.id "count"
+                            , Attr.min "0"
+                            , Attr.onInput Message.CountChange
+                            , Attr.type_ "number"
+                            , Attr.value (String.fromInt (Count.toInt model.count))
+                            ]
+                            []
+                        ]
+                    , Html.button [ Attr.class "btn btn-primary", Attr.type_ "submit" ]
+                        [ Html.text "Save Workout"
+                        ]
                     ]
-                , Html.button [ Attr.onClick (Message.RequestItem "hello") ]
-                    [ Html.text "get"
-                    ]
-                , Html.button [ Attr.onClick (Message.RemoveItem "hello") ]
-                    [ Html.text "remove"
-                    ]
+                , case model.workouts of
+                    RemoteData.NotAsked ->
+                        Html.text "NotAsked"
+
+                    RemoteData.Loading ->
+                        Html.text "Loading ..."
+
+                    RemoteData.Failure error ->
+                        Html.text ("Failure: " ++ Decode.errorToString error)
+
+                    RemoteData.Success workouts ->
+                        Html.ul [ Attr.class "mt-3" ] <|
+                            List.map
+                                (\workout ->
+                                    Html.li []
+                                        [ Html.text <|
+                                            case model.zone of
+                                                Just zone ->
+                                                    Time.zonedPosixToString zone workout.posix
+
+                                                Nothing ->
+                                                    Time.posixToString workout.posix
+                                        , Html.text ": "
+                                        , Html.text (String.fromInt (Count.toInt workout.count))
+                                        , Html.text " "
+                                        , Html.text (Exercise.toString workout.exercise)
+                                        ]
+                                )
+                                workouts
                 ]
             , Html.div [ Attr.class "border-top my-3 pt-3 text-center text-muted" ]
                 [ Html.text <|

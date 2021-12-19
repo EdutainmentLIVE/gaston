@@ -1,5 +1,7 @@
 module Gaston.Extra.Time exposing (..)
 
+import Json.Decode as Decode
+import Json.Encode as Encode
 import Time
 
 
@@ -46,6 +48,19 @@ monthToInt month =
 millisToSeconds : Int -> Int
 millisToSeconds millis =
     millis // 1000
+
+
+posixFromJson : Decode.Decoder Time.Posix
+posixFromJson =
+    Decode.int
+        |> Decode.map Time.millisToPosix
+
+
+posixToJson : Time.Posix -> Encode.Value
+posixToJson posix =
+    posix
+        |> Time.posixToMillis
+        |> Encode.int
 
 
 posixToString : Time.Posix -> String
