@@ -75,21 +75,26 @@ view model =
                         Html.text ("Failure: " ++ Decode.errorToString error)
 
                     RemoteData.Success workouts ->
-                        Html.ul [ Attr.class "mt-3" ] <|
+                        Html.ul [ Attr.class "list-group mt-3" ] <|
                             List.map
                                 (\workout ->
-                                    Html.li []
-                                        [ Html.text <|
-                                            case model.zone of
-                                                Just zone ->
-                                                    Time.zonedPosixToString zone workout.posix
+                                    Html.li [ Attr.class "list-group-item" ]
+                                        [ Html.dl [ Attr.class "mb-0" ]
+                                            [ Html.dt [] [ Html.text "Time" ]
+                                            , Html.dd []
+                                                [ Html.text <|
+                                                    case model.zone of
+                                                        Just zone ->
+                                                            Time.zonedPosixToString zone workout.posix
 
-                                                Nothing ->
-                                                    Time.posixToString workout.posix
-                                        , Html.text ": "
-                                        , Html.text (String.fromInt (Count.toInt workout.count))
-                                        , Html.text " "
-                                        , Html.text (Exercise.toString workout.exercise)
+                                                        Nothing ->
+                                                            Time.posixToString workout.posix
+                                                ]
+                                            , Html.dt [] [ Html.text "Exercise" ]
+                                            , Html.dd [] [ Html.text (Exercise.toString workout.exercise) ]
+                                            , Html.dt [] [ Html.text "Count" ]
+                                            , Html.dd [] [ Html.text (String.fromInt (Count.toInt workout.count)) ]
+                                            ]
                                         ]
                                 )
                                 workouts
