@@ -1,0 +1,20 @@
+on: push
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn outdated
+      - run: yarn elm-outdated
+      - run: yarn elm-format --validate source
+      - run: yarn elm-analyse
+      - run: yarn build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gaston-${{ github.sha }}
+          path: dist
