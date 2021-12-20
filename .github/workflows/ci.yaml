@@ -22,3 +22,7 @@ jobs:
         with:
           name: gaston-${{ github.sha }}
           path: dist
+      - uses: JamesIves/github-pages-deploy-action@4.1.8
+        with:
+          branch: gh-pages
+          folder: dist
