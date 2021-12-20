@@ -105,7 +105,7 @@ view model =
                                 workouts
                 ]
             , Html.div [ Attr.class "border-top my-3 pt-3 text-center text-muted" ]
-                [ Html.a [Attr.href "https://github.com/EdutainmentLIVE/gaston"]
+                [ Html.a [ Attr.href "https://github.com/EdutainmentLIVE/gaston" ]
                     [ Html.text "EdutainmentLIVE/gaston"
                     ]
                 , Html.text " "
