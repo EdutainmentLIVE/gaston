@@ -1,6 +1,10 @@
 import { Elm } from "./Gaston/Main.elm";
 
-const app = Elm.Gaston.Main.init();
+const app = Elm.Gaston.Main.init({
+    flags: {
+        commit: process.env.GITHUB_SHA || null,
+    },
+});
 
 app.ports.removeItem.subscribe((key) => {
     localStorage.removeItem(key);

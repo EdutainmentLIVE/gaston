@@ -104,12 +104,23 @@ view model =
                                 )
                                 workouts
                 ]
-            , Html.div [ Attr.class "border-top my-3 pt-3 text-center text-muted" ]
-                [ Html.a [ Attr.href "https://github.com/EdutainmentLIVE/gaston" ]
-                    [ Html.text "EdutainmentLIVE/gaston"
+            , Html.div [ Attr.class "border-top my-3 pt-3 text-muted" ]
+                [ Html.p []
+                    [ Html.text "Powered by "
+                    , case model.flags.commit of
+                        Nothing ->
+                            Html.a [ Attr.href "https://github.com/EdutainmentLIVE/gaston" ]
+                                [ Html.text "EdutainmentLIVE/gaston"
+                                ]
+
+                        Just commit ->
+                            Html.a [ Attr.href ("https://github.com/EdutainmentLIVE/gaston/tree/" ++ commit) ]
+                                [ Html.text ("EdutainmentLIVE/gaston@" ++ String.left 7 commit)
+                                ]
+                    , Html.text "."
                     ]
-                , Html.text " "
-                , Html.text <|
+                , Html.p [Attr.class "font-monospace"]
+                    [ Html.text <|
                     case ( model.zone, model.posix ) of
                         ( Just zone, Just posix ) ->
                             Time.zonedPosixToString zone posix
@@ -118,7 +129,8 @@ view model =
                             Time.posixToString posix
 
                         _ ->
-                            "Does anybody really know what time it is?"
+                            "0"
+                    ]
                 ]
             ]
         ]
