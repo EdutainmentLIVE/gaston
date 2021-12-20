@@ -119,17 +119,17 @@ view model =
                                 ]
                     , Html.text "."
                     ]
-                , Html.p [Attr.class "font-monospace"]
+                , Html.p [ Attr.class "font-monospace" ]
                     [ Html.text <|
-                    case ( model.zone, model.posix ) of
-                        ( Just zone, Just posix ) ->
-                            Time.zonedPosixToString zone posix
+                        case ( model.zone, model.posix ) of
+                            ( Just zone, Just posix ) ->
+                                Time.zonedPosixToString zone posix
 
-                        ( Nothing, Just posix ) ->
-                            Time.posixToString posix
+                            ( Nothing, Just posix ) ->
+                                Time.posixToString posix
 
-                        _ ->
-                            "0"
+                            _ ->
+                                "0"
                     ]
                 ]
             ]
