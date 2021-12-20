@@ -11,6 +11,6 @@
     "private": true,
     "scripts": {
         "build": "parcel build --public-url . source/index.html",
-        "serve": "parcel serve source/index.html"
+        "serve": "parcel serve --no-cache source/index.html"
     }
 }
