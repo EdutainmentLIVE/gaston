@@ -8,6 +8,10 @@ jobs:
         with:
           node-version: '17'
           cache: yarn
+      - uses: actions/cache@v2
+        with:
+          path: elm-stuff
+          key: ${{ hashFiles('elm.json') }}
       - run: yarn install --frozen-lockfile
       - run: yarn outdated
       - run: yarn elm-outdated
