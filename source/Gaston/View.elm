@@ -105,7 +105,11 @@ view model =
                                 workouts
                 ]
             , Html.div [ Attr.class "border-top my-3 pt-3 text-center text-muted" ]
-                [ Html.text <|
+                [ Html.a [ Attr.href "https://github.com/EdutainmentLIVE/gaston" ]
+                    [ Html.text "EdutainmentLIVE/gaston"
+                    ]
+                , Html.text " "
+                , Html.text <|
                     case ( model.zone, model.posix ) of
                         ( Just zone, Just posix ) ->
                             Time.zonedPosixToString zone posix

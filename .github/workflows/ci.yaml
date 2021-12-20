@@ -1,0 +1,29 @@
+on: push
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+          cache: yarn
+      - uses: actions/cache@v2
+        with:
+          path: elm-stuff
+          key: ${{ hashFiles('elm.json') }}
+      - run: yarn install --frozen-lockfile
+      - run: yarn outdated
+      - run: yarn elm-outdated
+      - run: yarn elm-format --validate source
+      - run: yarn elm-analyse
+      - run: yarn build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: gaston-${{ github.sha }}
+          path: dist
+      - if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@4.1.8
+        with:
+          branch: gh-pages
+          folder: dist
