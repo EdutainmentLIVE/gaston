@@ -10,7 +10,7 @@
     },
     "private": true,
     "scripts": {
-        "build": "parcel build source/index.html",
+        "build": "parcel build --public-url . source/index.html",
         "serve": "parcel serve source/index.html"
     }
 }
