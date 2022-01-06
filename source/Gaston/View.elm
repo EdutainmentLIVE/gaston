@@ -60,10 +60,20 @@ view model =
                             ]
                             []
                         ]
-                    , Html.button [ Attr.class "btn btn-primary", Attr.type_ "submit" ]
+                    , Html.button [ Attr.class "btn btn-primary mb-3", Attr.type_ "submit" ]
                         [ Html.text "Save Workout"
                         ]
                     ]
+                , case model.workouts of
+                    RemoteData.Success _ ->
+                        Html.button
+                            [ Attr.class "btn btn-outline-secondary"
+                            , Attr.onClick Message.ExportWorkouts
+                            ]
+                            [ Html.text "Export Workouts" ]
+
+                    _ ->
+                        Html.text ""
                 , case model.workouts of
                     RemoteData.NotAsked ->
                         Html.text "NotAsked"

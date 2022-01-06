@@ -9,6 +9,7 @@ type Message
     = CountChange String
     | DeleteWorkout Int
     | ExerciseChange String
+    | ExportWorkouts
     | Identity
     | PosixChange Time.Posix
     | ReceiveItem String (Maybe String)

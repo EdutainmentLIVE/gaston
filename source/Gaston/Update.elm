@@ -2,6 +2,7 @@ module Gaston.Update exposing (update)
 
 import Browser
 import Browser.Navigation as Nav
+import File.Download
 import Gaston.Constant as Constant
 import Gaston.LocalStorage as LocalStorage
 import Gaston.Type.Count as Count
@@ -56,6 +57,20 @@ update message model =
 
                 Nothing ->
                     ( model, Cmd.none )
+
+        Message.ExportWorkouts ->
+            let
+                command =
+                    case model.workouts of
+                        RemoteData.Success workouts ->
+                            Workouts.toJson workouts
+                                |> Encode.encode 4
+                                |> File.Download.string "workouts.json" "application/json"
+
+                        _ ->
+                            Cmd.none
+            in
+            ( model, command )
 
         Message.Identity ->
             ( model, Cmd.none )
