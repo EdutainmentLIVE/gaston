@@ -16,6 +16,7 @@ type Exercise
     = BicycleCrunch
     | JumpingJack
     | PushUp
+    | Row
     | Squat
 
 
@@ -24,6 +25,7 @@ all =
     [ BicycleCrunch
     , JumpingJack
     , PushUp
+    , Row
     , Squat
     ]
 
@@ -39,6 +41,9 @@ fromString string =
 
         "push-up" ->
             Just PushUp
+
+        "row" ->
+            Just Row
 
         "squat" ->
             Just Squat
@@ -58,6 +63,9 @@ toString exercise =
 
         PushUp ->
             "push-up"
+
+        Row ->
+            "row"
 
         Squat ->
             "squat"
