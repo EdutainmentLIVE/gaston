@@ -1,2 +1,2 @@
-FROM node:17.2.0
+FROM node:17.3.0
 USER node
