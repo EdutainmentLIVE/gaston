@@ -13,13 +13,15 @@ import Maybe.Extra as Maybe
 
 
 type Exercise
-    = PushUp
+    = BicycleCrunch
+    | PushUp
     | Squat
 
 
 all : List Exercise
 all =
-    [ PushUp
+    [ BicycleCrunch
+    , PushUp
     , Squat
     ]
 
@@ -27,6 +29,9 @@ all =
 fromString : String -> Maybe Exercise
 fromString string =
     case string of
+        "bicycle-crunch" ->
+            Just BicycleCrunch
+
         "push-up" ->
             Just PushUp
 
@@ -40,6 +45,9 @@ fromString string =
 toString : Exercise -> String
 toString exercise =
     case exercise of
+        BicycleCrunch ->
+            "bicycle-crunch"
+
         PushUp ->
             "push-up"
 
