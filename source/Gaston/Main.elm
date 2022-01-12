@@ -34,7 +34,7 @@ init flags url key =
     let
         model =
             { count = Count.zero
-            , exercise = Exercise.PushUp
+            , exercise = Exercise.BicycleCrunch
             , flags = flags
             , key = key
             , posix = Nothing
