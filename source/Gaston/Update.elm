@@ -31,7 +31,7 @@ update message model =
                             ( model, Cmd.none )
 
                 Nothing ->
-                    ( model, Cmd.none )
+                    ( { model | count = Count.zero }, Cmd.none )
 
         Message.DeleteWorkout index ->
             case model.workouts of
